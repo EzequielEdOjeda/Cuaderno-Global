@@ -12,7 +12,7 @@ Este sitio web ofrece información clara sobre nuestros servicios editoriales, p
 - Navegación adaptada a dispositivos móviles
 - Dos planes para autores: Gratuito y Premium
 
-## 🧰 Tecnologías utilizadas
+## 🚀 Tecnologías utilizadas
 
 - HTML5
 - Tailwind CSS
