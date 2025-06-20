@@ -23,7 +23,7 @@ Este sitio web ofrece información clara sobre nuestros servicios editoriales, p
 
 Abre el siguiente enlace en cualquier navegador moderno para ver el proyecto en funcionamiento:
 
-[![Ver sitio web](https://img.shields.io/badge/Ver%20sitio%20web-Cuaderno--Global-blue?style=for-the-badge&logo=googlechrome)](https://ezequieledojeda.github.io/Cuaderno-Global/)
+[![Ver sitio web](https://img.shields.io/badge/Ver%20-Cuaderno%20Global-blue?style=for-the-badge&logo=googlechrome)](https://ezequieledojeda.github.io/Cuaderno-Global/)
 
 ---
 
