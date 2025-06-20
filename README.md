@@ -1,4 +1,4 @@
-# 🌍 Cuaderno Global - Publica tu libro gratis
+# 🌍 Cuaderno Global - Publica tu libro hoy
 
 **Cuaderno Global** es una plataforma editorial solidaria que permite a autores de todo el mundo publicar sus libros de forma gratuita para los lectores, a través de Google Books.
 
@@ -16,16 +16,14 @@ Este sitio web ofrece información clara sobre nuestros servicios editoriales, p
 
 - HTML5
 - Tailwind CSS
-- JavaScript (vanilla)
+- JavaScript 
 - Slick Carousel
 
-## 📌 Cómo usar
+## 📌 Accede al sitio web
 
-Solo abre el archivo `index.html` en cualquier navegador moderno. Todo está integrado de forma local o con CDN, no requiere instalación.
+Abre el siguiente enlace en cualquier navegador moderno para ver el proyecto en funcionamiento:
 
-## 📬 Contacto
-
-Para consultas o publicaciones:
+🔗 [Proyecto-Cuaderno-Global](https://ezequieledojeda.github.io/Cuaderno-Global/)
 
 
 ---
