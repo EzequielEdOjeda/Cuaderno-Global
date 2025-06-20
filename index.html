@@ -1,0 +1,722 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publica Tu Libro Hoy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2360a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5 2-5 2-5-2-5-2V6z"></path><path d="M2 6V4a2 2 0 012-2h10a2 2 0 012 2v2"></path><path d="M14 10h6"></path><path d="M14 14h4"></path><path d="M14 18h6"></path></svg>' type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Tailwind's gray-900 */
+            color: #e2e8f0; /* Tailwind's slate-200 */
+        }
+        .hero-bg-dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); /* slate-900 to indigo-700 */
+        }
+        .card-dark {
+            background-color: #2d3748; /* Tailwind's gray-800 */
+            border: 1px solid #4a5568; /* Tailwind's gray-600 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-dark:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* blue-600 */
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #4338ca; /* indigo-700 */
+            transform: scale(1.05);
+        }
+        .btn-accent {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-accent:hover {
+            background-color: #059669; /* emerald-600 */
+            transform: scale(1.05);
+        }
+        .notebook-icon path {
+            stroke: #60a5fa; /* blue-400 */
+        }
+        .header-sticky {
+            background-color: rgba(26, 32, 44, 0.85); /* gray-900 con transparencia */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Safari */
+        }
+        .section-title {
+            color: #93c5fd; /* blue-300 */
+        }
+        .text-muted {
+            color: #a0aec0; /* gray-500 */
+        }
+        .footer-dark {
+            background-color: #0f172a; /* slate-900 */
+        }
+        .text-orange-global {
+            color: #f97316; /* Tailwind's orange-500 */
+        }
+        .popular-label {
+            transform: rotate(45deg) translate(25%, -15%);
+            right: 0;
+            top: 0;
+            padding: 0.5rem 3rem;
+            z-index: 10;
+        }
+        .hamburger-button {
+            padding: 0.5rem;
+            border: 1px solid #4a5568;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        .hamburger-button:hover {
+            background-color: #2d3748;
+        }
+        .nav-links a {
+            position: relative;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        .nav-links a:hover {
+             transform: scale(1.1);
+        }
+        .faq-item {
+            background-color: #2d3748;
+            border: 1px solid #4a5568;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+        }
+        .faq-question {
+            color: #93c5fd;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+         .faq-question:hover {
+            background-color: #4a5568;
+        }
+        .faq-question h3 {
+             margin: 0;
+             font-size: 1.125rem; /* text-lg */
+        }
+        .faq-answer {
+            color: #a0aec0;
+            padding: 0 1.5rem;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding-bottom 0.5s ease-in-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* Increased max-height for potentially longer answers */
+            opacity: 1;
+            padding-bottom: 1rem;
+        }
+        .faq-item.active .faq-question {
+             background-color: #4a5568;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Estilos para el carrusel */
+        .slick-slide {
+            margin: 0 15px; /* Espacio entre libros */
+        }
+        .slick-slide img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem; /* Bordes redondeados para las portadas */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .slick-dots li button:before {
+            font-size: 12px;
+            color: #60a5fa; /* Color de los puntos de navegación */
+        }
+        .slick-dots li.slick-active button:before {
+            color: #2563eb; /* Color del punto activo */
+        }
+        .slick-prev:before, .slick-next:before {
+            color: #60a5fa; /* Color de las flechas */
+            font-size: 30px;
+        }
+        .book-carousel-container .slick-prev {
+            left: -40px; /* Ajusta la posición de la flecha previa */
+        }
+        .book-carousel-container .slick-next {
+            right: -40px; /* Ajusta la posición de la flecha siguiente */
+        }
+        @media (max-width: 767px) {
+           .book-carousel-container .slick-prev {
+                left: -10px;
+            }
+            .book-carousel-container .slick-next {
+                right: -10px;
+            }
+        }
+
+
+        @media (max-width: 767px) {
+            .grid-plans {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hamburger-button {
+                display: block;
+            }
+            .nav-links-mobile {
+                display: flex;
+                flex-direction: column;
+                background-color: rgba(26, 32, 44, 0.95);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 0;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                z-index: 40;
+                overflow: hidden;
+                max-height: 0;
+                opacity: 0;
+                transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            }
+            .nav-links-mobile.active {
+                max-height: 500px; /* Increased max-height for potentially more links */
+                opacity: 1;
+            }
+             .nav-links-mobile a {
+                padding: 0.75rem 1.5rem;
+                text-align: center;
+                color: #e2e8f0;
+                transition: background-color 0.3s ease;
+            }
+            .nav-links-mobile a:hover {
+                background-color: #2d3748;
+            }
+            .hero-button {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1rem;
+                box-sizing: border-box;
+                line-height: 1.5;
+                text-align: center;
+            }
+            .premium-header {
+                flex-direction: column;
+                align-items: center;
+            }
+            .premium-header span.price-tag { /* Added class for specific targeting */
+                margin-top: 0.75rem;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .hamburger-button,
+            .nav-links-mobile {
+                display: none;
+            }
+            .nav-links {
+                display: flex;
+                align-items: center;
+            }
+            .premium-header span.price-tag { /* Added class for specific targeting */
+                margin-left: auto; /* Keeps it to the right */
+                margin-right: 4rem; /* Adjusted margin for desktop */
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="header-sticky shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center relative">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 notebook-icon mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5 2-5 2-5-2-5-2V6z"></path>
+                    <path d="M2 6V4a2 2 0 012-2h10a2 2 0 012 2v2"></path>
+                    <path d="M14 10h6"></path>
+                    <path d="M14 14h4"></path>
+                    <path d="M14 18h6"></path>
+                </svg>
+                <span class="font-bold text-3xl text-orange-global tracking-wider">GLOBAL</span>
+            </div>
+
+            <nav class="nav-links space-x-6">
+                <a href="#nosotros" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">Nosotros</a>
+                <a href="#servicios" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">Servicios</a>
+                <a href="#planes" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">Planes</a>
+                <a href="#exitos" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">Éxitos</a>
+                <a href="#faq" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">FAQs</a>
+                <a href="#contacto" class="text-slate-300 hover:text-orange-global transition duration-300 text-lg">Contacto</a>
+            </nav>
+
+            <button id="hamburgerBtn" class="hamburger-button text-slate-300 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <nav id="mobileMenu" class="nav-links-mobile">
+                <a href="#nosotros" class="mobile-menu-link">Nosotros</a>
+                <a href="#servicios" class="mobile-menu-link">Servicios</a>
+                <a href="#planes" class="mobile-menu-link">Planes</a>
+                <a href="#exitos" class="mobile-menu-link">Éxitos</a>
+                <a href="#faq" class="mobile-menu-link">FAQs</a>
+                <a href="#contacto" class="mobile-menu-link">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-bg-dark py-24 sm:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl sm:text-6xl font-bold text-white mb-6 leading-tight">
+                <span class="text-sky-300">Cuaderno</span> <span class="text-orange-global">Global</span>
+            </h1>
+            <p class="text-2xl text-sky-200 mb-4 font-semibold">Publicá tu libro gratis para el mundo</p>
+            <p class="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
+                ¿Tienes un libro y sueñas con publicarlo? <br class="hidden sm:block"> En Cuaderno Global, te ayudamos a que tu obra llegue a lectores de todo el mundo a través de Google Books, ¡de forma gratuita para ellos!
+            </p>
+            <p class="text-lg text-slate-400 mb-12">Nuestra misión es facilitar la difusión de nuevas voces y talentos literarios.</p>
+            <a href="#planes" class="btn-primary font-semibold px-10 py-4 rounded-lg text-lg shadow-xl hero-button">
+                <span id="heroButtonText">Descubre Nuestros Planes</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="nosotros" class="py-16 md:py-20 bg-slate-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title mb-8 md:mb-12">Nuestra Misión y Filosofía</h2>
+            <div class="max-w-4xl mx-auto text-lg text-slate-300 space-y-6 text-center">
+                <p>Somos una <strong class="text-white">editorial digital solidaria</strong>. Creemos que todas las historias merecen ser contadas y leídas. Nuestro modelo está pensado para autores que desean compartir su trabajo con el mundo sin barreras económicas para el lector.</p>
+                <div class="grid md:grid-cols-2 gap-8 mt-8 md:mt-10 text-left">
+                    <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-semibold text-sky-300 mb-3">Nuestra Esencia</h3>
+                        <p>Los autores invierten en el <strong class="text-white">servicio completo de publicación</strong> (diseño, edición y publicación), pero el fruto de ese trabajo, el libro, se ofrece <strong class="text-white">gratis para el público</strong>. No perseguimos fines de lucro para el autor a través de las ventas, ni tenemos un enfoque comercial tradicional. Ganamos por el servicio editorial que brindamos, no por las ventas ni por la distribución posterior.</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-semibold text-sky-300 mb-3">Modelo de Negocio</h3>
+                        <ul class="space-y-3 list-disc list-inside">
+                            <li><strong class="text-white">El Autor Paga:</strong> Por diseño de portada, edición y publicación en Google Books.</li>
+                            <li><strong class="text-white">El Libro es Gratuito para el Público:</strong> El libro no se vende, se comparte libremente.</li>
+                            <li><strong class="text-white">Sin Regalías ni Cobros por Venta:</strong> No gestionamos reparto de regalías ni cobramos porcentajes por ventas.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-8">Buscamos empoderar a los autores para que sus voces lleguen lejos, construyendo una comunidad literaria basada en la generosidad y el amor por la lectura.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="py-16 md:py-20 bg-slate-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title mb-8 md:mb-12">Nuestros Servicios Editoriales</h2>
+            <div class="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
+                <div class="relative">
+                    <img src="https://placehold.co/600x450/1e3a8a/f97316?text=Publica+Tu+Libro+Hoy" alt="[Imagen de servicios editoriales]" class="rounded-xl shadow-2xl w-full h-auto object-cover relative z-10" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1e3a8a/ffffff?text=Error+al+cargar+imagen';">
+                    <div class="absolute -top-4 -left-4 w-full h-full bg-orange-500 opacity-30 rounded-xl transform rotate-[-3deg] z-0"></div>
+                </div>
+                <div class="text-lg text-slate-300 space-y-5">
+                    <p>En <strong class="text-sky-400">Cuaderno</strong> <strong class="text-orange-global">Global</strong>, entendemos la pasión y el esfuerzo que implica escribir un libro. Por eso, ofrecemos un espacio dedicado a autores como tú, que desean compartir sus historias con el mundo.</p>
+                    <p>Nos especializamos en preparar y publicar tu libro en <strong class="text-sky-400">Google Books</strong>, una plataforma con alcance global que permite a los lectores descubrir y disfrutar de nuevas obras de manera gratuita.</p>
+                    <p>Creemos en el poder de las palabras y en la importancia de que cada historia sea contada. <strong class="text-white">¡Tu libro merece ser leído por el mundo!</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="planes" class="py-16 md:py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title mb-8 md:mb-12">Elige el Plan Perfecto para Ti</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 max-w-5xl mx-auto grid-plans">
+                <div class="card-dark p-8 rounded-xl shadow-2xl flex flex-col">
+                    <h3 class="text-3xl font-bold text-emerald-400 mb-5">Plan Gratuito</h3>
+                    <p class="text-muted mb-6 flex-grow">Recibe una opinión sincera y humana sobre tu manuscrito. Ideal para obtener una primera impresión profesional y constructiva antes de dar el siguiente paso.</p>
+                    <ul class="text-slate-300 space-y-3 mb-8 flex-grow">
+                        <li class="flex items-center">
+                            <svg class="w-6 h-6 text-emerald-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Opinión honesta y detallada de tu obra.
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-6 h-6 text-emerald-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Perspectiva valiosa de un lector real.
+                        </li>
+                         <li class="flex items-center">
+                            <svg class="w-6 h-6 text-emerald-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Completamente sin costo alguno.
+                        </li>
+                    </ul>
+                    <a id="elegirGratis" href="mailto:facebookdeedgar2017@gmail.com?subject=Interés%20en%20Plan%20Gratuito%20-%20Cuaderno%20Global&body=Hola%2C%20estoy%20interesado%2Fa%20en%20el%20Plan%20Gratuito%20para%20mi%20libro.%0D%0APor%20favor%2C%20contáctenme%20con%20más%20detalles%20sobre%20cómo%20proceder.%0D%0ASaludos%2C%0D%0A%5BNombre%20del%20Autor%5D" class="w-full btn-accent font-semibold py-3 px-6 rounded-lg text-center block mt-auto">
+                        Seleccionar Plan Gratuito
+                    </a>
+                </div>
+
+                <div class="card-dark p-8 rounded-xl shadow-2xl flex flex-col border-2 border-sky-500 relative overflow-hidden">
+                    <div class="absolute popular-label bg-sky-500 text-white text-xs font-bold py-1 px-12 shadow-md">POPULAR</div>
+                    <div class="flex justify-between items-center mb-5 premium-header">
+                        <h3 class="text-3xl font-bold text-sky-400">Plan Premium</h3>
+                        <span class="price-tag bg-sky-500 text-white text-lg font-semibold px-4 py-1 rounded-full shadow-sm z-0">$10 USD</span>
+                    </div>
+                    <p class="text-muted mb-6 flex-grow">Servicio integral para que tu libro brille. Nos encargamos de los detalles técnicos y creativos para una publicación profesional en Google Books.</p>
+                    <ul class="text-slate-300 space-y-3 mb-8 flex-grow">
+                        <li class="flex items-center">
+                            <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Diseño de portada (Opcional).
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Edición ligera (ortografía, formato, títulos).
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Publicación exclusiva en Google Books.
+                        </li>
+                    </ul>
+                    <p class="text-sm text-amber-400 font-semibold mb-4 text-center">Este precio subirá pronto, ¡asegurá tu lugar ahora!</p>
+                    <a id="elegirPremium" href="https://forms.gle/aobx7tiCX2mVziZj7" target="_blank" rel="noopener noreferrer" class="w-full btn-primary font-semibold py-3 px-6 rounded-lg text-center block mt-auto">
+                        Adquirir Plan Premium
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="exitos" class="py-16 md:py-20 bg-slate-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title mb-8 md:mb-12">Autores que Brillan con Nosotros</h2>
+            <p class="text-lg text-muted text-center mb-10 md:mb-12 max-w-2xl mx-auto">Descubre algunos de los libros que hemos tenido el placer de ayudar a publicar. Estas historias ya están llegando a lectores de todo el mundo gracias a Google Books.</p>
+            <div class="book-carousel-container max-w-4xl mx-auto relative">
+                <div class="book-carousel">
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/Rao0EQAAQBAJ?fife=w240-h345" alt="[Portada del libro 12 Países Que Venden Sus Pasaportes]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+1';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/HdQ3EQAAQBAJ?fife=w240-h345" alt="[Portada del libro 9 Formas de Ganar Dinero Siendo Adolescente]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+2';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/U008EQAAQBAJ?fife=w240-h345" alt="[Portada del libro La Caballerosidad no ha muerto]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+3';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/D9Q3EQAAQBAJ?fife=w240-h345" alt="[Portada del libro Haz Esto Si Quieres Convertirte en Millonario]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+4';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/Yao0EQAAQBAJ?fife=w240-h345" alt="[Portada del libro Libro de Resolución Rápida del Cubo de Rubik Para Niños]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+5';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/EK61EAAAQBAJ?fife=w240-h345" alt="[Portada del libro La Filosofía de Confucio]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+6';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/2FD4EAAAQBAJ?fife=w240-h345" alt="[Portada del libro Chau Hipo]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+7';"></div>
+                    <div><img src="https://play.google.com/books/publisher/content/images/frontcover/MggQEQAAQBAJ?fife=w240-h345" alt="[Portada del libro Curso de Redactor de Contenidos]" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/240x345/2d3748/e2e8f0?text=Portada+Libro+8';"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-16 md:py-20 bg-slate-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title mb-8 md:mb-10">Preguntas Frecuentes</h2>
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                        <h3 class="text-xl font-semibold">¿Qué es Cuaderno Global?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Somos una editorial digital dedicada a ayudar a autores a publicar sus libros en Google Books, facilitando que sus obras lleguen de forma gratuita para los lectores.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                     <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                        <h3 class="text-xl font-semibold">¿Cómo puedo publicar mi libro con ustedes?</h3>
+                         <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Puedes comenzar seleccionando el Plan Premium, que incluye servicios completos de diseño, edición y publicación en Google Books.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                     <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                        <h3 class="text-xl font-semibold">¿El Plan Gratuito realmente no tiene costo?</h3>
+                         <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p>El Plan Gratuito está diseñado para brindarte una opinión profesional y constructiva sobre tu manuscrito sin ningún compromiso financiero.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                     <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                        <h3 class="text-xl font-semibold">¿Dónde se publicará mi libro?</h3>
+                         <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tu libro será publicado en Google Books, una plataforma con alcance global que permite a millones de lectores descubrir y acceder a tu obra de forma gratuita.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                     <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                        <h3 class="text-xl font-semibold">¿Realizan marketing o promoción de mi libro?</h3>
+                         <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No realizamos campañas de marketing o promoción directa. Sin embargo, como parte de nuestro servicio, optimizamos tu libro con palabras clave relevantes (SEO) para mejorar su visibilidad y posicionamiento dentro de la plataforma de Google Books, facilitando que los lectores interesados lo encuentren.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Cuánto tiempo tarda el proceso de publicación?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>El tiempo puede variar según la complejidad del manuscrito y la rapidez de respuesta del autor. Generalmente, desde la recepción del manuscrito final y el pago, el proceso de edición, diseño y publicación puede tomar entre 2 y 3 semanas.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Mantengo los derechos de autor de mi libro?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>¡Absolutamente! Tú, como autor, mantienes todos los derechos de autor sobre tu obra. Cuaderno Global solo actúa como un facilitador para la edición y publicación en Google Books bajo nuestro modelo solidario.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Qué formatos de archivo aceptan para el manuscrito?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>Preferimos recibir manuscritos en formatoscomo .docx (Microsoft Word) o .pdf (Portable Document Format). Esto facilita el proceso de edición y formato. Si tienes tu manuscrito en otro formato, consúltanos.</p>
+                   </div>
+               </div>
+
+                <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Hay algún género literario que no publiquen?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>Publicamos una amplia variedad de géneros. Sin embargo, nos reservamos el derecho de no publicar contenido que consideremos ofensivo, ilegal, que incite al odio, o que vaya en contra de nuestros principios editoriales de respeto y solidaridad.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Cómo es el proceso de diseño de portada (Plan Premium)?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>Si no tienes una portada, te pediremos ideas, preferencias de estilo y cualquier imagen o concepto que tengas. Nuestro equipo creará una propuesta de diseño profesional y atractiva para tu aprobación antes de finalizarla.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Puedo ver una vista previa antes de publicar?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>Sí, como parte del Plan Premium, te enviaremos una versión final (generalmente en formato PDF) para tu revisión y aprobación antes de proceder con la publicación en Google Books.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Y si quiero cambios después de la publicación?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>Pequeñas correcciones o cambios sustanciales que requieran una nueva edición o re-maquetación significativa, podría aplicarse una tarifa adicional.</p>
+                   </div>
+               </div>
+
+               <div class="faq-item rounded-lg shadow-md">
+                    <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                       <h3 class="text-xl font-semibold">¿Cómo se realiza el pago del Plan Premium?</h3>
+                        <svg class="w-6 h-6 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+                   <div class="faq-answer">
+                       <p>El pago del Plan Premium se realiza a través de un enlace seguro que te proporcionaremos una vez que escojas el Plan Premium y nos envíes tu manuscrito. Aceptamos diversos métodos de pago seguros y convenientes.</p>
+                   </div>
+               </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="py-16 md:py-20 bg-slate-900">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold section-title mb-6">¿Listo para Compartir Tu Historia?</h2>
+            <p class="text-lg text-muted mb-8 md:mb-10 max-w-xl mx-auto">Si tienes alguna duda sobre nuestros servicios o cómo podemos ayudarte a publicar tu libro, no dudes en escribirnos. <br class="hidden sm:block">¡Estamos aquí para ayudarte!</p>
+            <a href="mailto:facebookdeedgar2017@gmail.com?subject=Consulta%20General%20-%20Cuaderno%20Global" class="btn-secondary font-semibold px-10 py-4 rounded-lg text-lg shadow-xl">
+                Contáctanos Ahora
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer-dark text-slate-400 py-10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center mb-4">
+                 <svg class="w-10 h-10 notebook-icon mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5 2-5 2-5-2-5-2V6z"></path>
+                    <path d="M2 6V4a2 2 0 012-2h10a2 2 0 012 2v2"></path>
+                    <path d="M14 10h6"></path>
+                    <path d="M14 14h4"></path>
+                    <path d="M14 18h6"></path>
+                </svg>
+                <span class="text-orange-global" style="font-size:30px;">GLOBAL</span>
+            </div>
+            <p class="text-sm">&copy; 2024-2025 Cuaderno Global. Todos los derechos reservados.</p>
+            <p class="text-xs text-slate-500 mt-2">Dedicados a publicar libros en Google Books de uso gratuito para los lectores.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <script>
+        // Script para suavizar el scroll en los enlaces del menú
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = document.querySelector('.header-sticky').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+                // Cerrar el menú móvil si está abierto al hacer clic en un enlace
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Script para el menú de hamburguesa
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Cerrar menú móvil si se hace clic fuera de él
+        document.addEventListener('click', (event) => {
+            const isClickInsideMenu = mobileMenu.contains(event.target);
+            const isClickOnHamburger = hamburgerBtn.contains(event.target);
+            if (!isClickInsideMenu && !isClickOnHamburger && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Cerrar menú móvil al hacer clic en un enlace del menú (duplicado, se puede mantener uno)
+        document.querySelectorAll('.mobile-menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Actualizar texto del botón Hero según el tamaño de la pantalla
+        const heroButtonText = document.getElementById('heroButtonText');
+        function updateHeroButtonText() {
+            if (window.innerWidth < 768) { // md breakpoint
+                heroButtonText.textContent = 'Ver Planes';
+            } else {
+                heroButtonText.textContent = 'Descubre Nuestros Planes';
+            }
+        }
+        window.addEventListener('load', updateHeroButtonText);
+        window.addEventListener('resize', updateHeroButtonText);
+
+        // Script para el acordeón de FAQ
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const faqItem = item.closest('.faq-item');
+                const answer = faqItem.querySelector('.faq-answer');
+                // const icon = item.querySelector('.faq-icon'); // Icono ya no se rota con la clase 'active' en CSS
+
+                // Cerrar otros items abiertos
+                document.querySelectorAll('.faq-item.active').forEach(openItem => {
+                    if (openItem !== faqItem) {
+                        openItem.classList.remove('active');
+                        //  openItem.querySelector('.faq-answer').style.maxHeight = '0px'; // Controlado por CSS
+                        //  openItem.querySelector('.faq-answer').style.opacity = '0'; // Controlado por CSS
+                         openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                faqItem.classList.toggle('active');
+                item.setAttribute('aria-expanded', faqItem.classList.contains('active'));
+
+                // El manejo de max-height y opacity ahora se hace principalmente con CSS
+                // a través de la clase .active en .faq-item
+            });
+             // Permitir abrir/cerrar con la tecla Enter para accesibilidad
+            item.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    item.click();
+                }
+            });
+        });
+
+        // Inicialización del Carrusel de Libros con Slick
+        $(document).ready(function(){
+          $('.book-carousel').slick({
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: true,
+            responsive: [
+              {
+                breakpoint: 1024, // md
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 1,
+                }
+              },
+              {
+                breakpoint: 768, // sm
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  arrows: false // Ocultar flechas en pantallas más pequeñas
+                }
+              }
+            ]
+          });
+        });
+    </script>
+
+</body>
+</html>
